@@ -1,0 +1,84 @@
+구조체 : 사용자가 만드는 자료형
+
+
+구조체 선언
+strcut 구조체명 구조체변수명;
+ex. struct student s1;
+
+
+구조체 사용
+ex. s1.age = 10;
+
+
+byte alignment
+- 컴파일러가 구조체 멤버의 크기가 들쑥날쑥한 경우, padding byte를 넣어서 멤버들을 가지런하게 정렬하는 방법
+- 예를 들어, int 한개와 double 한개로 이루어진 구조체형이라면 12바이트가 되어야 하는데, 실제로는 패딩 바이트를 추가하여 16바이트가 되도록함.
+- 구조체의 멤버 선언 순서에 따라 구조체 크기가 달라짐. 따라서, 선언 순서를 변경해서 패딩 바이트를 줄이는 방법을 사용하기도 함.
+
+
+#pragma pack(1)
+- 컴파일러에 패딩 바이트를 넣지 않도록 지시하는 방법이다.
+- 이 경우 데이터를 읽고 쓰는 시간이 더 걸릴 수 있지만, 구조체의 크기는 모든 멤버의 크기를 더한 것과 같아지므로 사용하는 메모리의 크기는 최소화할 수 있다.
+- 이 구문은 구조체 선언 전에, 보통 include 다음에 넣어준다. 
+
+
+구조체 포인터의 사용
+---------------------------------------------
+#include <stdio.h>
+  struct score{
+  int kor,eng,math;
+};
+int main(void){
+  struct score yuni ={90,100,100};
+  struct score *ps = &yuni;
+  printf("국어 %d\n", (&ps).kor); //구조체 포인터로 멤버 접근
+  printf("수학 %d\n", ps->math);
+  return 0;
+}
+---------------------------------------------
+국어 90
+수학 100
+---------------------------------------------
+
+
+구조체 배열의 사용
+- 배열 표현 : ps[i].math
+- 포인터 표현: (*(ps+i)).math
+- 화살표 연산자 사용 : (ps+i)->math
+
+
+typedef, 형 재정의
+typedef 를 사용하면 자료형 이름에서 struct 을 생략할 수 있다. 
+
+
+typedef를 사용한 자료형 재정의
+---------------------------------------------
+#include <stdio.h>
+struct student{
+  int num;
+  double grade;
+}
+typedef struct student Student;
+void print_data(Student *ps);
+
+int main(void){
+  Student s1 ={31, 4.2};
+  print_data(&s1);
+  return 0;
+}
+
+void print_data(Student *ps){
+  printf("학번 %d  학점 %f \n", ps->num, ps->grade);
+}
+---------------------------------------------
+"struct student"를 "Student"라는 새 이름으로 자료형을 재정의했다.
+또는
+---------------------------------------------
+typedef struct{
+  int num;
+  double grade;
+} Student;
+---------------------------------------------
+이렇게 하면 형 선언과 동시에 재정의할 수 있다.
+
+typedef는 기본 자료형도 재정의하는 것이 가능하다. 
